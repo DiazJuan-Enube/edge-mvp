@@ -29,5 +29,16 @@ services:
     depends_on:
       - db
 
+  worker:
+    build: .
+    restart: unless-stopped
+    # override entrypoint to run the worker bootstrap directly
+    entrypoint: ["python", "-m", "app.worker.bootstrap"]
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/polymarket
+      - WS_URL=${WS_URL:-wss://example/socket}
+    depends_on:
+      - db
+
 volumes:
   pgdata:
