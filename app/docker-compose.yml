@@ -29,11 +29,11 @@ services:
     depends_on:
       - db
 
-  worker:
+  ws-worker:
     build: .
     restart: unless-stopped
-    # override entrypoint to run the worker bootstrap directly
-    entrypoint: ["python", "-m", "app.worker.bootstrap"]
+    # override entrypoint to run the worker bootstrap directly (module name uses underscore)
+    entrypoint: ["python", "-m", "app.ws_worker.bootstrap"]
     environment:
       - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/polymarket
       - WS_URL=${WS_URL:-wss://example/socket}
